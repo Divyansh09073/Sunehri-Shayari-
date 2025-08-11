@@ -1,0 +1,1091 @@
+
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Shayri2.0</title><style></style></head><body><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+    <title>Sunehri Shayri | An Immersive Web Experience</title>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+    :root {
+        --primary-color: #f77062;
+        --secondary-color: #6a4b8a;
+        --text-color: #333;
+        --light-bg: #add8e6; /* Default Light Blue */
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.5);
+        --emoji-box-bg: white;
+        --shayari-box-bg: white;
+        --random-btn-color: #ffc107;
+        --random-btn-text-color: var(--text-color);
+        --copy-btn-color: #007bff;
+        --share-btn-color: #28a745;
+        --heart-btn-color: rgba(255,255,255,0.3);
+        
+        /* Watermark Colors */
+        --watermark-color-main: #000;
+        --developer-name-color-main: #ff0000;
+        --watermark-color-sidebar: #000;
+        --developer-name-color-sidebar: #ff69b4;
+    }
+    
+    body.theme-light-yellow {
+        --light-bg: #ffffe0;
+        --text-color: #333;
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --emoji-box-bg: #fff;
+        --shayari-box-bg: #fff;
+        --random-btn-color: #8b0000;
+        --random-btn-text-color: #fff;
+        
+        /* Watermark Colors for Light Yellow Theme */
+        --watermark-color-main: #000;
+        --developer-name-color-main: #ff0000;
+        --watermark-color-sidebar: #000;
+        --developer-name-color-sidebar: #0000ff;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--light-bg);
+        min-height: 120vh; /* Increased height for scrolling */
+        overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        transition: background-color 0.5s ease, color 0.5s ease;
+        color: var(--text-color);
+    }
+    
+    /* Random Emoji Rain */
+    .emoji-rain {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .rain-emoji {
+        position: absolute;
+        top: -10%;
+        font-size: 2em;
+        opacity: 0.4;
+        animation: rain 10s linear infinite;
+        transform: scale(0.4);
+    }
+
+    @keyframes rain {
+        0% {
+            transform: translateY(0) scale(0.4) rotate(0deg);
+            opacity: 0.4;
+        }
+        100% {
+            transform: translateY(110vh) scale(0.4) rotate(360deg);
+            opacity: 0.2;
+        }
+    }
+
+    /* Main Content Container - Centered and Styled */
+    .main-container {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        max-width: 80%;
+        width: 100%;
+        z-index: 10;
+        transition: background 0.5s ease;
+        margin: 50px auto;
+    }
+
+    /* Animated Flower Emojis for Shayari Box */
+    .shayari-container .animated-emoji {
+        font-size: 2em;
+        position: absolute;
+        animation: rotateZoom 5s linear infinite;
+        text-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .shayari-container .top-left {
+        top: -20px;
+        left: -20px;
+    }
+
+    .shayari-container .bottom-right {
+        bottom: -20px;
+        right: -20px;
+        animation-delay: 1s;
+    }
+
+    @keyframes rotateZoom {
+        0% { transform: rotate(0deg) scale(1); opacity: 1; }
+        50% { transform: rotate(180deg) scale(1.2); opacity: 0.8; }
+        100% { transform: rotate(360deg) scale(1); opacity: 1; }
+    }
+
+    /* Buttons */
+    .btn {
+        border: none;
+        color: var(--random-btn-text-color);
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        margin: 5px;
+    }
+    
+    .btn.random-btn {
+        background-color: var(--random-btn-color);
+        box-shadow: 0 5px 15px rgba(255,193,7,0.4);
+    }
+
+    .btn.delete-all-btn {
+        background-color: #dc3545;
+        color: white;
+        box-shadow: 0 5px 15px rgba(220,53,69,0.4);
+    }
+    
+    .btn.submit-btn {
+        background-color: #28a745;
+        color: white;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    .btn.random-btn:hover {
+        box-shadow: 0 8px 20px rgba(255,193,7,0.6);
+    }
+    .btn.delete-all-btn:hover {
+        box-shadow: 0 8px 20px rgba(220,53,69,0.6);
+    }
+    .btn.submit-btn:hover {
+        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6);
+    }
+
+    .action-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        font-size: 1.2em;
+        color: var(--text-color);
+        background: var(--glass-bg);
+    }
+
+    .action-btn.copy-btn {
+        background-color: var(--copy-btn-color);
+        color: white;
+    }
+    .action-btn.share-btn {
+        background-color: var(--share-btn-color);
+        color: white;
+    }
+    .action-btn.heart-btn {
+        background-color: var(--heart-btn-color);
+        color: var(--text-color);
+    }
+    .action-btn.interest-btn, .action-btn.disinterest-btn {
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        color: var(--text-color);
+        font-size: 1.5em;
+    }
+    
+    .action-btn.disinterest-btn {
+        color: #ff4d4d;
+    }
+    .action-btn.interest-btn {
+        color: #4CAF50;
+    }
+    
+    .action-btn:hover {
+        transform: scale(1.05);
+    }
+    
+    /* New Emoji Mood Buttons */
+    .emoji-mood-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+    .emoji-mood-row {
+        display: flex;
+        justify-content: center;
+        margin: 5px 0;
+    }
+    .emoji-mood-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        font-size: 2em;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
+        border: none;
+        background-color: var(--emoji-box-bg);
+    }
+
+    .emoji-mood-btn:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    }
+    
+    .emoji-mood-btn.love { color: #ff6b6b; }
+    .emoji-mood-btn.sad { color: #5c626d; }
+    .emoji-mood-btn.broken { color: #a32222; }
+    .emoji-mood-btn.joyful { color: #f7d794; }
+
+    /* Typography */
+    h1, h2, h3 {
+        font-weight: 600;
+        margin-top: 0;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        color: var(--text-color);
+        transition: color 0.5s ease;
+    }
+
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    
+    p {
+        line-height: 1.6;
+        margin-bottom: 15px;
+        color: var(--text-color);
+        transition: color 0.5s ease;
+    }
+    
+    .shayari-container {
+        background-color: var(--shayari-box-bg);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.15);
+        position: relative;
+        transition: background-color 0.5s ease;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .shayari-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.6em;
+        line-height: 1.7;
+        color: var(--text-color);
+        margin: 0;
+        text-align: center;
+        font-weight: 600;
+        transition: color 0.5s ease;
+    }
+    
+    /* Interactive Heart Icon */
+    .heart-btn {
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .heart-btn.liked {
+        background-color: #ff6b88;
+        transform: scale(1.2);
+        animation: pulseHeart 0.5s ease-in-out;
+    }
+    
+    .heart-btn.liked i {
+        color: white;
+    }
+
+    @keyframes pulseHeart {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1.2); }
+    }
+
+    /* Favorite Shayaris List */
+    .favorite-item {
+        background: rgba(255,255,255,0.3);
+        padding: 10px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        font-style: italic;
+        position: relative;
+    }
+
+    /* Search Bar and Button Container */
+    .welcome-text {
+        font-size: 2em;
+        font-weight: 700;
+        color: var(--text-color);
+        margin-bottom: 20px;
+    }
+
+    .username-highlight {
+        font-family: 'Pacifico', cursive; /* Example of an attractive font */
+        color: var(--primary-color);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 1.2em; /* Make the name slightly bigger */
+    }
+    
+    /* Menu Button & Sidebar */
+    .menu-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.5em;
+        z-index: 100;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, background 0.5s ease, border 0.5s ease;
+    }
+
+    .menu-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 250px;
+        height: 100%;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        z-index: 99;
+        transition: left 0.3s ease-in-out, background 0.5s ease;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-link {
+        display: block;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 10px;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: background 0.3s ease, color 0.5s ease;
+        font-weight: 500;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+    .sidebar-link:hover {
+        background: rgba(255,255,255,0.5);
+    }
+    
+    /* Favorite Shayari list styling */
+    #favoritesList .favorite-item-text {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.8em;
+        color: var(--text-color);
+        line-height: 1.4;
+        margin-right: auto;
+        transition: color 0.5s ease;
+    }
+    
+    #favoritesList .favorite-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        background: rgba(255,255,255,0.5);
+        padding: 8px;
+        border-radius: 10px;
+        transition: background-color 0.5s ease;
+    }
+
+    #favoritesList .favorite-item .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    #favoritesList .favorite-item .action-buttons button {
+        background: transparent;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: color 0.5s ease;
+    }
+    
+    /* Theme Switch Button */
+    .theme-switch-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.5em;
+        z-index: 100;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, background 0.5s ease;
+    }
+    .theme-switch-btn:hover {
+        transform: scale(1.1);
+    }
+
+
+    /* Modal for Name Input and Post Shayari */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .modal-content {
+        background: var(--light-bg);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+        border: 1px solid var(--glass-border);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-input, .modal-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 30px;
+        margin: 10px 0;
+        font-size: 1em;
+        background: rgba(255,255,255,0.5);
+        color: var(--text-color);
+        outline: none;
+        transition: background-color 0.5s ease, color 0.5s ease;
+        box-sizing: border-box;
+    }
+    
+    .modal-textarea {
+        border-radius: 15px;
+        height: 120px;
+        resize: vertical;
+    }
+
+    .modal-input::placeholder, .modal-textarea::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Footer Styles for Watermark */
+    .footer {
+        position: fixed;
+        bottom: 10px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8em;
+        color: var(--watermark-color-main);
+        opacity: 1;
+        padding: 5px 0;
+        transition: color 0.5s ease;
+        z-index: 5;
+    }
+    
+    .footer a {
+        color: var(--watermark-color-main);
+        text-decoration: none;
+    }
+    
+    .footer .developer-name {
+        font-weight: 600;
+        color: var(--developer-name-color-main);
+        transition: color 0.5s ease;
+    }
+    
+    .developer-watermark {
+        margin-top: auto;
+        padding-top: 20px;
+        font-size: 0.9em;
+        text-align: center;
+        color: var(--watermark-color-sidebar);
+        opacity: 1;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        transition: color 0.5s ease;
+    }
+    
+    .developer-watermark a {
+        color: var(--watermark-color-sidebar);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .developer-watermark .developer-name {
+        font-weight: 600;
+        color: var(--developer-name-color-sidebar);
+        transition: color 0.5s ease;
+    }
+
+    .developer-watermark i.fa-heart, .footer i.fa-heart {
+        color: red;
+    }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="emoji-rain" id="emojiRain"></div>
+
+    <div class="menu-btn" id="menuBtn">☰</div>
+
+    <div class="theme-switch-btn" id="themeSwitchBtn">🌚</div>
+
+    <div class="sidebar" id="sidebarMenu">
+        <h2 style="margin-top: 20px;">Your Shayaris</h2>
+        <a href="#" class="sidebar-link" id="myProfileBtn"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="#" class="sidebar-link" id="showFavoritesBtn"><i class="fas fa-heart"></i> Your Favourite Shayari</a>
+        <div id="favoritesList" style="display: none;">
+            <p style="opacity: 0.7; font-size: 0.9em; margin: 10px 0;">Your favorite shayaris will appear here.</p>
+        </div>
+        <a href="#" class="sidebar-link" id="postShayariBtn"><i class="fas fa-edit"></i> Post Your Shayari</a>
+        <h2 style="margin-top: 20px;">Developer Contact</h2>
+        <a href="https://t.me/divyansh_deewana" target="_blank" class="sidebar-link"><i class="fab fa-telegram"></i> Telegram</a>
+        <a href="https://wa.me/your_number" target="_blank" class="sidebar-link"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="https://instagram.com/your_profile" target="_blank" class="sidebar-link"><i class="fab fa-instagram"></i> Instagram</a>
+        <a href="https://yourwebsite.com" target="_blank" class="sidebar-link"><i class="fas fa-globe"></i> Website</a>
+        
+        <div class="developer-watermark">
+            Developer : <span class="developer-name">Divyansh</span>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="onboardingModal">
+        <div class="modal-content">
+            <h2 style="color: var(--text-color);">Welcome to Sunehri Shayri</h2>
+            <p>Please enter your details to personalize your experience.</p>
+            <form id="onboardingForm">
+                <input type="text" class="modal-input" id="firstNameInput" placeholder="First Name" required>
+                <input type="text" class="modal-input" id="lastNameInput" placeholder="Last Name" required>
+                <input type="text" class="modal-input" id="cityInput" placeholder="City" required>
+                <button type="submit" class="btn submit-btn">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <h2 style="color: var(--text-color);">My Profile</h2>
+            <form id="profileForm">
+                <p>Edit your personal details below.</p>
+                <input type="text" class="modal-input" id="profileFirstNameInput" placeholder="First Name" required>
+                <input type="text" class="modal-input" id="profileLastNameInput" placeholder="Last Name" required>
+                <button type="submit" class="btn submit-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="postShayariModal">
+        <div class="modal-content">
+            <h2 style="color: var(--text-color);">Post Your Shayari</h2>
+            <p>Share your thoughts with us!</p>
+            <form id="postShayariForm">
+                <input type="text" class="modal-input" id="postNameInput" placeholder="Your Name" required>
+                <input type="tel" class="modal-input" id="postNumberInput" placeholder="Your Phone Number" required>
+                <textarea class="modal-textarea" id="postShayariTextarea" placeholder="Write your shayari here..." required></textarea>
+                <button type="submit" class="btn submit-btn">Submit Shayari</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="main-container">
+        <div style="text-align: center;">
+            <h1 class="welcome-text" id="welcomeMessage">Sunehri Shayri ✨</h1>
+        </div>
+        
+        <div class="emoji-mood-container">
+            <div class="emoji-mood-row">
+                <button class="emoji-mood-btn love" data-category="love">🥰</button>
+                <button class="emoji-mood-btn sad" data-category="sad">🥺</button>
+            </div>
+            <div class="emoji-mood-row">
+                <button class="emoji-mood-btn broken" data-category="broken">💔</button>
+                <button class="emoji-mood-btn joyful" data-category="joyful">💓</button>
+            </div>
+        </div>
+
+        <div class="shayari-container">
+            <div class="animated-emoji top-left">🌼</div>
+            <p id="shayariDisplay" class="shayari-text">Loading...</p>
+            <div class="animated-emoji bottom-right">🌸</div>
+        </div>
+        
+        <div style="display: flex; align-items: center; justify-content: center;">
+            <button class="action-btn disinterest-btn" id="disinterestBtn">👎</button>
+            <button class="btn random-btn" id="randomShayariBtn">Random Shayari</button>
+            <button class="action-btn interest-btn" id="interestBtn">👍</button>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+            <span class="heart-btn action-btn" id="favoriteIcon"><i class="far fa-heart"></i></span>
+            <span class="copy-btn action-btn" id="copyShayariBtn"><i class="fas fa-copy"></i></span>
+            <span class="share-btn action-btn" id="whatsappShareBtn"><i class="fab fa-whatsapp"></i></span>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        © 2025 Sunehri Shayari | Developed with <i class="fas fa-heart"></i> by <span class="developer-name">Divyansh - Deewana</span>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const onboardingModal = document.getElementById('onboardingModal');
+            const onboardingForm = document.getElementById('onboardingForm');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            const categoryButtons = document.querySelectorAll('.emoji-mood-btn');
+            const shayariDisplay = document.getElementById('shayariDisplay');
+            const copyShayariBtn = document.getElementById('copyShayariBtn');
+            const whatsappShareBtn = document.getElementById('whatsappShareBtn');
+            const favoriteIcon = document.getElementById('favoriteIcon');
+            const favoritesList = document.getElementById('favoritesList');
+            const menuBtn = document.getElementById('menuBtn');
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            const randomShayariBtn = document.getElementById('randomShayariBtn');
+            const emojiRainContainer = document.getElementById('emojiRain');
+            const showFavoritesBtn = document.getElementById('showFavoritesBtn');
+            const themeSwitchBtn = document.getElementById('themeSwitchBtn');
+            const interestBtn = document.getElementById('interestBtn');
+            const disinterestBtn = document.getElementById('disinterestBtn');
+            const postShayariBtn = document.getElementById('postShayariBtn');
+            const postShayariModal = document.getElementById('postShayariModal');
+            const postShayariForm = document.getElementById('postShayariForm');
+            const myProfileBtn = document.getElementById('myProfileBtn');
+            const profileModal = document.getElementById('profileModal');
+            const profileForm = document.getElementById('profileForm');
+            const profileFirstNameInput = document.getElementById('profileFirstNameInput');
+            const profileLastNameInput = document.getElementById('profileLastNameInput');
+            const root = document.documentElement;
+
+            const API_URL = "https://api.shizo.top/api/quote/shayari?apikey=knightbot";
+            const TELEGRAM_BOT_TOKEN = "7559884107:AAFqj_JYVrlU4wFyapqrbkxgTx34pxmK7i8";
+            const TELEGRAM_CHAT_ID = "2031314339";
+            
+            // Example list of banned users (can be managed from a server or a separate list)
+            const bannedUsers = ['John Doe']; // Full names that are banned
+
+            const themes = ['default', 'light-yellow'];
+            let currentThemeIndex = 0;
+
+            function switchTheme() {
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                const theme = themes[currentThemeIndex];
+                if (theme === 'default') {
+                    document.body.className = '';
+                } else {
+                    document.body.className = `theme-${theme}`;
+                }
+            }
+
+            // Function to get a random emoji
+            function getRandomEmoji() {
+                const emojis = ['😊', '😂', '😍', '🤩', '😘', '🤗', '🥳', '😎', '😜', '😇', '🥰', '💖', '❤️', '🌟', '✨', '🌈', '🔥', '💯', '🌸', '🌼', '🌹', '🦋'];
+                return emojis[Math.floor(Math.random() * emojis.length)];
+            }
+
+            // --- User Onboarding Logic ---
+            let users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            const savedFirstName = localStorage.getItem('shayariUserFirstName');
+            const savedLastName = localStorage.getItem('shayariUserLastName');
+
+            if (savedFirstName) {
+                welcomeMessage.innerHTML = `Welcome, <span class="username-highlight">${savedFirstName}</span>!`;
+                onboardingModal.classList.remove('active');
+            } else {
+                onboardingModal.classList.add('active');
+            }
+
+            onboardingForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const firstName = document.getElementById('firstNameInput').value.trim();
+                const lastName = document.getElementById('lastNameInput').value.trim();
+                const city = document.getElementById('cityInput').value.trim();
+                const fullName = `${firstName} ${lastName}`;
+
+                if (firstName && lastName && city) {
+                    localStorage.setItem('shayariUserFirstName', firstName);
+                    localStorage.setItem('shayariUserLastName', lastName);
+                    localStorage.setItem('shayariUserCity', city);
+                    
+                    welcomeMessage.innerHTML = `Welcome, <span class="username-highlight">${firstName}</span>!`;
+                    onboardingModal.classList.remove('active');
+                    
+                    const userStatus = bannedUsers.includes(fullName) ? 'Banned' : 'Active';
+                    users.push({
+                        fullName: fullName,
+                        city: city,
+                        status: userStatus
+                    });
+                    localStorage.setItem('registeredUsers', JSON.stringify(users));
+
+                    const userIndex = users.length;
+                    const totalUsers = users.length;
+
+                    const message = `*New User Onboarding*\n\n` +
+                                    `*User Name:* ${fullName}\n` +
+                                    `*City:* ${city}\n` +
+                                    `*Total Users:* ${totalUsers}\n` +
+                                    `*User ID:* ${userIndex}\n` +
+                                    `*Status:* ${userStatus}`;
+                    
+                    const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+
+                    try {
+                        await fetch(telegramUrl, { method: 'POST' });
+                    } catch (error) {
+                        console.error('Failed to send new user info to Telegram:', error);
+                    }
+                    
+                    fetchShayari(); // Fetch the first shayari after onboarding
+                } else {
+                    alert('Please fill in all fields!');
+                }
+            });
+
+            // --- My Profile Logic ---
+            myProfileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const firstName = localStorage.getItem('shayariUserFirstName');
+                const lastName = localStorage.getItem('shayariUserLastName');
+                
+                if (firstName && lastName) {
+                    profileFirstNameInput.value = firstName;
+                    profileLastNameInput.value = lastName;
+                    profileModal.classList.add('active');
+                } else {
+                    alert('Please complete your profile first!');
+                    onboardingModal.classList.add('active');
+                }
+            });
+
+            profileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const oldFirstName = localStorage.getItem('shayariUserFirstName');
+                const oldLastName = localStorage.getItem('shayariUserLastName');
+                const newFirstName = profileFirstNameInput.value.trim();
+                const newLastName = profileLastNameInput.value.trim();
+
+                if (newFirstName && newLastName) {
+                    if (oldFirstName !== newFirstName || oldLastName !== newLastName) {
+                        localStorage.setItem('shayariUserFirstName', newFirstName);
+                        localStorage.setItem('shayariUserLastName', newLastName);
+
+                        welcomeMessage.innerHTML = `Welcome, <span class="username-highlight">${newFirstName}</span>!`;
+                        profileModal.classList.remove('active');
+                        alert('Profile updated successfully!');
+                        
+                        const oldFullName = `${oldFirstName} ${oldLastName}`;
+                        const newFullName = `${newFirstName} ${newLastName}`;
+                        
+                        const message = `*User Name Change Notification*\n\n` +
+                                        `*Old Name:* ${oldFullName}\n` +
+                                        `*New Name:* ${newFullName}`;
+
+                        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+
+                        try {
+                            await fetch(telegramUrl, { method: 'POST' });
+                        } catch (error) {
+                            console.error('Failed to send name change notification to Telegram:', error);
+                        }
+                    } else {
+                        profileModal.classList.remove('active');
+                    }
+                } else {
+                    alert('Please fill in all fields!');
+                }
+            });
+
+            // Close modal when clicking outside
+            profileModal.addEventListener('click', (e) => {
+                if (e.target.id === 'profileModal') {
+                    profileModal.classList.remove('active');
+                }
+            });
+
+            // --- Shayari Fetching Logic from API (Existing) ---
+            async function fetchShayari() {
+                shayariDisplay.textContent = "Loading...";
+                favoriteIcon.classList.remove('liked');
+                favoriteIcon.querySelector('i').className = 'far fa-heart';
+                
+                try {
+                    const response = await fetch(API_URL);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    shayariDisplay.textContent = data.result;
+                } catch (error) {
+                    console.error('Error fetching shayari:', error);
+                    shayariDisplay.textContent = "Sorry, could not load a shayari right now. Please try again later.";
+                }
+            }
+            
+            // --- Random Shayari Button Logic (Existing) ---
+            randomShayariBtn.addEventListener('click', fetchShayari);
+
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', fetchShayari);
+            });
+
+            // --- Interest/Disinterest Buttons Logic (New) ---
+            interestBtn.addEventListener('click', () => {
+                alert("Thanks for your feedback! We'll show you more shayaris like this.");
+                fetchShayari();
+            });
+
+            disinterestBtn.addEventListener('click', () => {
+                alert("Understood. We won't show you shayaris like this again.");
+                fetchShayari();
+            });
+
+
+            // --- Favorites Logic ---
+            let favorites = JSON.parse(localStorage.getItem('favoriteShayaris')) || [];
+
+            function renderFavorites() {
+                favoritesList.innerHTML = '';
+                if (favorites.length === 0) {
+                    favoritesList.innerHTML = '<p style="opacity: 0.7; font-size: 0.9em; margin: 10px 0;">Your favorite shayaris will appear here.</p>';
+                } else {
+                    favorites.forEach((shayari, index) => {
+                        const div = document.createElement('div');
+                        div.classList.add('favorite-item');
+                        div.innerHTML = `<p class="favorite-item-text">${shayari}</p>
+                            <div class="action-buttons">
+                                <button class="copy-fav-btn" data-shayari="${shayari}"><i class="fas fa-copy"></i></button>
+                                <button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i></button>
+                            </div>`;
+                        favoritesList.appendChild(div);
+                    });
+                    const deleteAllButton = document.createElement('button');
+                    deleteAllButton.classList.add('btn', 'delete-all-btn');
+                    deleteAllButton.id = 'deleteAllFavoritesBtn';
+                    deleteAllButton.textContent = 'Delete All';
+                    favoritesList.appendChild(deleteAllButton);
+                }
+            }
+
+            function saveFavorites() {
+                localStorage.setItem('favoriteShayaris', JSON.stringify(favorites));
+                renderFavorites();
+            }
+
+            favoriteIcon.addEventListener('click', () => {
+                const currentShayari = shayariDisplay.textContent.trim();
+                if (currentShayari && currentShayari !== "Loading..." && currentShayari !== "Sorry, could not load a shayari right now. Please try again later." && !favorites.includes(currentShayari)) {
+                    favorites.push(currentShayari);
+                    saveFavorites();
+                    favoriteIcon.classList.add('liked');
+                    favoriteIcon.querySelector('i').className = 'fas fa-heart';
+                    setTimeout(() => { 
+                        favoriteIcon.classList.remove('liked'); 
+                        favoriteIcon.querySelector('i').className = 'far fa-heart';
+                    }, 500); 
+                } else if (favorites.includes(currentShayari)) {
+                    alert('This shayari is already in your favorites!');
+                }
+            });
+
+            favoritesList.addEventListener('click', (e) => {
+                if (e.target.closest('.delete-btn')) {
+                    const index = e.target.closest('.delete-btn').dataset.index;
+                    favorites.splice(index, 1);
+                    saveFavorites();
+                }
+                if (e.target.closest('.copy-fav-btn')) {
+                    const shayariText = e.target.closest('.copy-fav-btn').dataset.shayari;
+                    navigator.clipboard.writeText(shayariText).then(() => {
+                        alert('Shayari copied to clipboard!');
+                    });
+                }
+                if (e.target.closest('#deleteAllFavoritesBtn')) {
+                    if (confirm('Are you sure you want to delete all your favorite shayaris?')) {
+                        favorites = [];
+                        saveFavorites();
+                        alert('All favorites have been deleted.');
+                    }
+                }
+            });
+            
+            showFavoritesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                favoritesList.style.display = favoritesList.style.display === 'block' ? 'none' : 'block';
+                renderFavorites();
+            });
+
+            // --- Copy Button Functionality ---
+            copyShayariBtn.addEventListener('click', () => {
+                const shayariText = shayariDisplay.textContent;
+                if (shayariText && shayariText !== "Loading...") {
+                    navigator.clipboard.writeText(shayariText).then(() => {
+                        copyShayariBtn.style.background = '#4CAF50';
+                        setTimeout(() => {
+                            copyShayariBtn.style.background = 'var(--copy-btn-color)';
+                        }, 1500);
+                    }).catch(err => {
+                        alert('Failed to copy shayari.');
+                    });
+                } else {
+                    alert('There is no shayari to copy!');
+                }
+            });
+
+            // --- WhatsApp Share Functionality ---
+            whatsappShareBtn.addEventListener('click', () => {
+                const shayariText = shayariDisplay.textContent.trim();
+                const userName = localStorage.getItem('shayariUserFirstName') || 'Anonymous User';
+
+                if (shayariText && shayariText !== "Loading...") {
+                    const emoji1 = getRandomEmoji();
+                    const emoji2 = getRandomEmoji();
+                    const message = `>${userName} *ने आपको यह शायरी भेजी है*\n\n*${emoji1}*\n*${shayariText}*\n*${emoji2}*\n\n*फेट मोर शायरी क्लिक 👇🏻*\n*https://img-url-generatorv1.vercel.app/*`;
+                    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                } else {
+                    alert('There is no shayari to share!');
+                }
+            });
+
+            // --- Menu Button Logic ---
+            menuBtn.addEventListener('click', () => {
+                sidebarMenu.classList.toggle('active');
+            });
+
+            // --- Theme Switcher Logic ---
+            themeSwitchBtn.addEventListener('click', switchTheme);
+            
+            // --- Post Shayari Modal Logic ---
+            postShayariBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                postShayariModal.classList.add('active');
+            });
+
+            postShayariModal.addEventListener('click', (e) => {
+                if (e.target.id === 'postShayariModal') {
+                    postShayariModal.classList.remove('active');
+                }
+            });
+
+            postShayariForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('postNameInput').value;
+                const number = document.getElementById('postNumberInput').value;
+                const shayari = document.getElementById('postShayariTextarea').value;
+                
+                const message = `*New Shayari Submission*\n\n*Name:* ${name}\n*Number:* ${number}\n*Shayari:*\n${shayari}`;
+                
+                const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+
+                try {
+                    const response = await fetch(telegramUrl, { method: 'POST' });
+                    if (response.ok) {
+                        alert('Thank you for your submission! We will review your shayari shortly.');
+                        postShayariForm.reset();
+                        postShayariModal.classList.remove('active');
+                    } else {
+                        throw new Error('Failed to send message to Telegram.');
+                    }
+                } catch (error) {
+                    console.error('Error submitting shayari:', error);
+                    alert('An error occurred while submitting. Please try again.');
+                }
+            });
+
+            // --- Emoji Rain Logic ---
+            const emojis = ['💖', '🌟', '✨', '💕', '🌈'];
+            const emojiCount = 30;
+            
+            for(let i = 0; i < emojiCount; i++) {
+                const emoji = document.createElement('div');
+                emoji.classList.add('rain-emoji');
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                emoji.style.left = Math.random() * 100 + 'vw';
+                emoji.style.animationDelay = Math.random() * -5 + 's';
+                emoji.style.animationDuration = Math.random() * 5 + 5 + 's';
+                
+                emojiRainContainer.appendChild(emoji);
+            }
+
+            // Initial shayari display on page load
+            if (savedFirstName) {
+                fetchShayari();
+            }
+        });
+    </script>
+</body>
+</html><script></script></body></html>
