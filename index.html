@@ -793,12 +793,12 @@
                     const userIndex = users.length;
                     const totalUsers = users.length;
 
-                    const message = `*New User Onboarding*\n\n` +
-                                    `*User Name:* ${fullName}\n` +
-                                    `*City:* ${city}\n` +
-                                    `*Total Users:* ${totalUsers}\n` +
-                                    `*User ID:* ${userIndex}\n` +
-                                    `*Status:* ${userStatus}`;
+                    const message = `🧞 New User Onboarding 🌎\n\n` +
+                                    `🧑🏻‍🎓 User Name: ${fullName}\n` +
+                                    `🌇 City: ${city}\n` +
+                                    `👥 Total Users: ${totalUsers}\n` +
+                                    `🙇🏻 User ID: ${userIndex}\n` +
+                                    `🎚️ Status: ${userStatus}`;
                     
                     const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
 
@@ -849,9 +849,9 @@
                         const oldFullName = `${oldFirstName} ${oldLastName}`;
                         const newFullName = `${newFirstName} ${newLastName}`;
                         
-                        const message = `*User Name Change Notification*\n\n` +
-                                        `*Old Name:* ${oldFullName}\n` +
-                                        `*New Name:* ${newFullName}`;
+                        const message = `🧑🏻‍🎓 User Name Change Notification ⚠️\n\n` +
+                                        `⏪ Old Name: ${oldFullName}\n` +
+                                        `⏭️New Name:* ${newFullName}`;
 
                         const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
 
@@ -1046,7 +1046,7 @@
                 const number = document.getElementById('postNumberInput').value;
                 const shayari = document.getElementById('postShayariTextarea').value;
                 
-                const message = `*New Shayari Submission*\n\n*Name:* ${name}\n*Number:* ${number}\n*Shayari:*\n${shayari}`;
+                const message = `🎊 New Shayari Submission 😋\n\n🧑🏻‍🎓 Name: ${name}\n📟 Number: ${number}\n📖 Shayari:\n${shayari}`;
                 
                 const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
 
